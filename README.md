@@ -3,4 +3,4 @@
 2. Navigate to the project directory:
 9. Download dependencies: npm i
 10. Run the Server: npm run dev
-11. Open your web browser and navigate to http://localhost:5173/ to access the website.
+11. Open your web browser and navigate to http://localhost:5000/ to access the website.
