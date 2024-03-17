@@ -2,9 +2,14 @@ body {
   background-color: white;
   margin: 0;
   height: 100%;
+  background: url("https://www.control4.com/files/large/153e5f35b68b569");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .control-panel {
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,6 +21,7 @@ body {
 }
 
 .control-card {
+  background-color: rgba(255, 255, 255, 0.8);
   flex: 1;
   height: 250px;
   display: flex;

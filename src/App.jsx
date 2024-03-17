@@ -22,22 +22,22 @@ function App() {
   const [acstate, setacstate] = useState(0)
   const [actemp, setactemp] = useState(23)
   const [showMessage, setShowMessage] = useState(false)
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       setShowMessage({ loading: true, message: "Loading.." })
-  //       let res = await axios.get(`https://kodessphere-api.vercel.app/devices/${teamid}`)
-  //       setShowMessage(false)
-  //       setbulb(res.data.bulb)
-  //       setfan(res.data.fan)
-  //       setled(res.data.led)
-  //       setacstate(res.data.ac.state)
-  //       setactemp(res.data.ac.temp)
-  //     } catch (error) {
-  //       setShowMessage({ error: true, message: "Unable to fetch data!", dismissable: true })
-  //     }
-  //   })()
-  // }, [])
+  useEffect(() => {
+    (async () => {
+      try {
+        setShowMessage({ loading: true, message: "Loading.." })
+        let res = await axios.get(`https://kodessphere-api.vercel.app/devices/${teamid}`)
+        setShowMessage(false)
+        setbulb(res.data.bulb)
+        setfan(res.data.fan)
+        setled(res.data.led)
+        setacstate(res.data.ac.state)
+        setactemp(res.data.ac.temp)
+      } catch (error) {
+        setShowMessage({ error: true, message: "Unable to fetch data!", dismissable: true })
+      }
+    })()
+  }, [])
   async function handleBulb() {
     try {
       let res;
@@ -53,6 +53,10 @@ function App() {
         setbulb(1)
       else
         setbulb(0)
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        setShowMessage(false)
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
@@ -65,6 +69,10 @@ function App() {
         throw new Error("")
       setled(color.hex)
       setshowledColorPicker(false)
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        setShowMessage(false)
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
@@ -76,6 +84,10 @@ function App() {
       if (!res.data.success)
         throw new Error("")
       setfan(evt.target.value)
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        setShowMessage(false)
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
@@ -87,37 +99,48 @@ function App() {
       if (!res.data.success)
         throw new Error("")
       setacstate(evt.target.checked ? 1 : 0)
-      window.location.reload()
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        window.location.reload()
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
   }
-  async function increaseTemp(){
+  async function increaseTemp() {
     try {
-      if(actemp==29){
-        setShowMessage({error:true,message:"Temperature cannot be greater than 29",dismissable:true})
+      if (actemp == 29) {
+        setShowMessage({ error: true, message: "Temperature cannot be greater than 29", dismissable: true })
         return;
       }
-      const rawData = JSON.stringify({ teamid, device: "ac", value: { "temp": actemp+1, "state": acstate } });
+      const rawData = JSON.stringify({ teamid, device: "ac", value: { "temp": actemp + 1, "state": acstate } });
       let res = await axios.post(`https://kodessphere-api.vercel.app/devices`, rawData, { headers: { 'Content-Type': 'application/json' } })
       if (!res.data.success)
         throw new Error("")
-      setactemp(actemp+1)
+      setactemp(actemp + 1)
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        setShowMessage(false)
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
   }
-  async function decreaseTemp(){
+  async function decreaseTemp() {
     try {
-      if(actemp==17){
-        setShowMessage({error:true,message:"Temperature cannot be less than 17",dismissable:true})
+      if (actemp == 17) {
+        setShowMessage({ error: true, message: "Temperature cannot be less than 17", dismissable: true })
         return;
       }
-      const rawData = JSON.stringify({ teamid, device: "ac", value: { "temp": actemp-1, "state": acstate } });
+      const rawData = JSON.stringify({ teamid, device: "ac", value: { "temp": actemp - 1, "state": acstate } });
       let res = await axios.post(`https://kodessphere-api.vercel.app/devices`, rawData, { headers: { 'Content-Type': 'application/json' } })
       if (!res.data.success)
         throw new Error("")
-      setactemp(actemp-1)
+      setactemp(actemp - 1)
+      setShowMessage({ success: true, message: "Update Successfull!" })
+      setTimeout(() => {
+        setShowMessage(false)
+      }, 500);
     } catch (error) {
       setShowMessage({ error: true, message: "Unable to update state!", dismissable: true })
     }
@@ -125,28 +148,28 @@ function App() {
   return (
     <>
       {showMessage && <MessageBox message={showMessage.message} error={showMessage.error} success={showMessage.success} loading={showMessage.loading} dismissable={showMessage.dismissable} setShowMessage={setShowMessage} />}
-      <h1 style={{ textAlign: 'center' }}>Team Dementors</h1>
-      <h3 style={{ textAlign: 'center' }}>Manage Your Smart Devices with Ease</h3>
+      <h1 style={{ textAlign: 'center',fontWeight:"800" }}>Team Dementors</h1>
+      <h3 style={{ textAlign: 'center',fontWeight:"800" }}>Manage Your Smart Devices with Ease</h3>
       <div className="control-panel">
         <div className="control-card">
-          <h3>Bulb</h3> <img style={{cursor:"pointer"}} role="button" src={bulb == 0 ? bulbOff : bulbOn} onClick={handleBulb} />
-          State: {bulb==0?"Off":"On"}
+          <h3>Bulb</h3> <img style={{ cursor: "pointer" }} role="button" src={bulb == 0 ? bulbOff : bulbOn} onClick={handleBulb} />
+          State: {bulb == 0 ? "Off" : "On"}
         </div>
         <div className="control-card">
           <h3>LED</h3>
-          <IoBulbSharp onClick={() => { setshowledColorPicker(!showledColorPicker) }} style={{ color: led == "#fff" ? "" : led ,cursor:"pointer"}} />
+          <IoBulbSharp onClick={() => { setshowledColorPicker(!showledColorPicker) }} style={{ color: led == "#fff" ? "" : led, cursor: "pointer" }} />
           Color: {led}
           {showledColorPicker && <SketchPicker color={led} onChange={handleLed} />}
         </div>
         <div className="control-card">
-          <h3>AC</h3> 
+          <h3>AC</h3>
           {acstate === 0 && <img src={acOff} />}
           {acstate === 1 && <img src={acOn} />}
           <Switch checked={acstate === 1} onChange={handleAcState} inputProps={{ 'aria-label': 'controlled' }} />
           <div style={{ display: "flex", alignItems: "center" }}>
-            <FaPlus onClick={increaseTemp} style={{ width: "40%", marginRight: "5px",cursor:"pointer" }} />
+            <FaPlus onClick={increaseTemp} style={{ width: "40%", marginRight: "5px", cursor: "pointer" }} />
             <span style={{ width: "20%", textAlign: "center", marginRight: "5px" }}>{actemp}</span>
-            <FaMinus onClick={decreaseTemp} style={{ width: "40%", marginLeft: "5px",cursor:"pointer" }} />
+            <FaMinus onClick={decreaseTemp} style={{ width: "40%", marginLeft: "5px", cursor: "pointer" }} />
           </div>
         </div>
         <div className="control-card">
